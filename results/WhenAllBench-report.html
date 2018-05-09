@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>WhenAllBench</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.10.14, OS=Windows 8.1 (6.3.9600.0)
+Intel Core i7-4770 CPU 3.40GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
+Frequency=3312640 Hz, Resolution=301.8740 ns, Timer=TSC
+.NET Core SDK=2.1.300-rc1-008673
+  [Host]     : .NET Core 2.1.0-rc1 (CoreCLR 4.6.26426.02, CoreFX 4.6.26426.04), 64bit RyuJIT
+  Job-FMEWTN : .NET Core 2.0.6 (CoreCLR 4.6.26212.01, CoreFX 4.6.26212.01), 64bit RyuJIT
+  Job-JCACMB : .NET Core 2.1.0-rc1 (CoreCLR 4.6.26426.02, CoreFX 4.6.26426.04), 64bit RyuJIT
+</code></pre>
+<pre><code>TargetCount=5  WarmupCount=5  
+</code></pre>
+
+<table>
+<thead><tr><th>          Method</th><th>Toolchain</th><th>LoopNum</th><th>TaskNum</th><th>      Mean</th><th>      Error</th><th>    StdDev</th>
+</tr>
+</thead><tbody><tr><td>TaskYield</td><td>.NET Core 2.0</td><td>10000</td><td>1</td><td>2,088.5 ns</td><td>25.754 ns</td><td>6.689 ns</td>
+</tr><tr><td>TaskCompletedTask</td><td>.NET Core 2.0</td><td>10000</td><td>1</td><td>375.0 ns</td><td>24.635 ns</td><td>6.399 ns</td>
+</tr><tr><td>TaskYieldQueue</td><td>.NET Core 2.0</td><td>10000</td><td>1</td><td>171,802.1 ns</td><td>5,031.695 ns</td><td>1,306.964 ns</td>
+</tr><tr><td>TaskCompletedTaskQueue</td><td>.NET Core 2.0</td><td>10000</td><td>1</td><td>149,919.3 ns</td><td>4,429.630 ns</td><td>1,150.580 ns</td>
+</tr><tr><td>TaskYield</td><td>.NET Core 2.1</td><td>10000</td><td>1</td><td>1,830.0 ns</td><td>45.332 ns</td><td>11.775 ns</td>
+</tr><tr><td>TaskCompletedTask</td><td>.NET Core 2.1</td><td>10000</td><td>1</td><td>376.8 ns</td><td>8.663 ns</td><td>2.250 ns</td>
+</tr><tr><td>TaskYieldQueue</td><td>.NET Core 2.1</td><td>10000</td><td>1</td><td>170,171.0 ns</td><td>15,004.073 ns</td><td>3,897.252 ns</td>
+</tr><tr><td>TaskCompletedTaskQueue</td><td>.NET Core 2.1</td><td>10000</td><td>1</td><td>150,311.5 ns</td><td>4,981.072 ns</td><td>1,293.815 ns</td>
+</tr><tr><td>TaskYield</td><td>.NET Core 2.0</td><td>10000</td><td>10</td><td>7,504.0 ns</td><td>394.081 ns</td><td>102.361 ns</td>
+</tr><tr><td>TaskCompletedTask</td><td>.NET Core 2.0</td><td>10000</td><td>10</td><td>760.9 ns</td><td>55.442 ns</td><td>14.401 ns</td>
+</tr><tr><td>TaskYieldQueue</td><td>.NET Core 2.0</td><td>10000</td><td>10</td><td>29,251,121.0 ns</td><td>13,772,221.666 ns</td><td>3,577,283.339 ns</td>
+</tr><tr><td>TaskCompletedTaskQueue</td><td>.NET Core 2.0</td><td>10000</td><td>10</td><td>1,565,564.5 ns</td><td>32,855.059 ns</td><td>8,533.979 ns</td>
+</tr><tr><td>TaskYield</td><td>.NET Core 2.1</td><td>10000</td><td>10</td><td>6,890.5 ns</td><td>113.640 ns</td><td>29.518 ns</td>
+</tr><tr><td>TaskCompletedTask</td><td>.NET Core 2.1</td><td>10000</td><td>10</td><td>725.5 ns</td><td>10.442 ns</td><td>2.712 ns</td>
+</tr><tr><td>TaskYieldQueue</td><td>.NET Core 2.1</td><td>10000</td><td>10</td><td>64,684,019.0 ns</td><td>15,594,655.525 ns</td><td>4,050,653.754 ns</td>
+</tr><tr><td>TaskCompletedTaskQueue</td><td>.NET Core 2.1</td><td>10000</td><td>10</td><td>1,664,589.9 ns</td><td>52,411.284 ns</td><td>13,613.636 ns</td>
+</tr><tr><td>TaskYield</td><td>.NET Core 2.0</td><td>10000</td><td>100</td><td>64,554.5 ns</td><td>2,616.702 ns</td><td>679.679 ns</td>
+</tr><tr><td>TaskCompletedTask</td><td>.NET Core 2.0</td><td>10000</td><td>100</td><td>3,912.9 ns</td><td>215.501 ns</td><td>55.975 ns</td>
+</tr><tr><td>TaskYieldQueue</td><td>.NET Core 2.0</td><td>10000</td><td>100</td><td>56,853,397.1 ns</td><td>14,165,311.289 ns</td><td>3,679,386.906 ns</td>
+</tr><tr><td>TaskCompletedTaskQueue</td><td>.NET Core 2.0</td><td>10000</td><td>100</td><td>16,994,759.1 ns</td><td>318,852.054 ns</td><td>82,820.635 ns</td>
+</tr><tr><td>TaskYield</td><td>.NET Core 2.1</td><td>10000</td><td>100</td><td>61,726.9 ns</td><td>2,627.345 ns</td><td>682.443 ns</td>
+</tr><tr><td>TaskCompletedTask</td><td>.NET Core 2.1</td><td>10000</td><td>100</td><td>3,772.9 ns</td><td>210.400 ns</td><td>54.651 ns</td>
+</tr><tr><td>TaskYieldQueue</td><td>.NET Core 2.1</td><td>10000</td><td>100</td><td>119,756,983.9 ns</td><td>30,738,126.367 ns</td><td>7,984,113.965 ns</td>
+</tr><tr><td>TaskCompletedTaskQueue</td><td>.NET Core 2.1</td><td>10000</td><td>100</td><td>16,218,704.5 ns</td><td>435,904.558 ns</td><td>113,224.587 ns</td>
+</tr></tbody></table>
+</body>
+</html>
