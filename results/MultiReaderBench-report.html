@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>MultiReaderBench</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.10.14, OS=Windows 8.1 (6.3.9600.0)
+Intel Core i7-4770 CPU 3.40GHz (Haswell), 1 CPU, 8 logical and 4 physical cores
+Frequency=3312644 Hz, Resolution=301.8737 ns, Timer=TSC
+.NET Core SDK=2.1.300-rc1-008673
+  [Host]     : .NET Core 2.1.0-rc1 (CoreCLR 4.6.26426.02, CoreFX 4.6.26426.04), 64bit RyuJIT
+  Job-CQFBMR : .NET Core 2.0.6 (CoreCLR 4.6.26212.01, CoreFX 4.6.26212.01), 64bit RyuJIT
+  Job-DJRETH : .NET Core 2.1.0-rc1 (CoreCLR 4.6.26426.02, CoreFX 4.6.26426.04), 64bit RyuJIT
+</code></pre>
+<pre><code>TargetCount=5  WarmupCount=5  
+</code></pre>
+
+<table>
+<thead><tr><th>             Method</th><th>Toolchain</th><th>LoopNum</th><th>TaskNum</th><th>Mean</th><th>Error</th><th>StdDev</th>
+</tr>
+</thead><tbody><tr><td>ThreadingChannelReadMulti</td><td>.NET Core 2.0</td><td>10000</td><td>1</td><td>642.8 us</td><td>2.880 us</td><td>0.7479 us</td>
+</tr><tr><td>ThreadingChannelReadMulti</td><td>.NET Core 2.1</td><td>10000</td><td>1</td><td>660.8 us</td><td>30.731 us</td><td>7.9823 us</td>
+</tr><tr><td>ThreadingChannelReadMulti</td><td>.NET Core 2.0</td><td>10000</td><td>100</td><td>1,595.8 us</td><td>552.248 us</td><td>143.4444 us</td>
+</tr><tr><td>ThreadingChannelReadMulti</td><td>.NET Core 2.1</td><td>10000</td><td>100</td><td>2,030.8 us</td><td>36.545 us</td><td>9.4923 us</td>
+</tr></tbody></table>
+</body>
+</html>

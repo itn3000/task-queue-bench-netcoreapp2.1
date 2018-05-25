@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
+    <PackageReference Include="System.Threading.Channels" Version="4.5.0-rc1" />
   </ItemGroup>
 
 </Project>

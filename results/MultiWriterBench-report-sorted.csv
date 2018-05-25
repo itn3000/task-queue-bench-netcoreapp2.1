@@ -1,0 +1,5 @@
+"Method","Toolchain","TaskNum","Mean"
+"ThreadingChannelWriteOnly",".NET Core 2.0","1","446.0 us"
+"ThreadingChannelWriteOnly",".NET Core 2.1","1","441.9 us"
+"ThreadingChannelWriteOnly",".NET Core 2.0","100","999.2 us"
+"ThreadingChannelWriteOnly",".NET Core 2.1","100","716.7 us"

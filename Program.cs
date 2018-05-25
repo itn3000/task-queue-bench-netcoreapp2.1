@@ -10,6 +10,61 @@ namespace taskbench
     using BenchmarkDotNet.Attributes.Jobs;
     using BenchmarkDotNet.Running;
     using System.Collections.Concurrent;
+    using System.Threading.Channels;
+    [Config(typeof(MultipleRuntime))]
+    public class MultiReaderBench
+    {
+        [Params(10000)]
+        public int LoopNum;
+        [Params(1, 100)]
+        public int TaskNum;
+        [Benchmark]
+        public void ThreadingChannelReadMulti()
+        {
+            var opt2 = new UnboundedChannelOptions();
+            opt2.AllowSynchronousContinuations = false;
+            var channel = Channel.CreateUnbounded<int>(opt2);
+            for (int i = 0; i < LoopNum; i++)
+            {
+                channel.Writer.TryWrite(i);
+            }
+            channel.Writer.TryComplete();
+            Task.WhenAll(Enumerable.Range(0, TaskNum).Select(async idx =>
+            {
+                await Task.Yield();
+                while (await channel.Reader.WaitToReadAsync().ConfigureAwait(false))
+                {
+                    while (channel.Reader.TryRead(out var item))
+                    {
+
+                    }
+                }
+            })).Wait();
+        }
+    }
+    [Config(typeof(MultipleRuntime))]
+    public class MultiWriterBench
+    {
+        [Params(10000)]
+        public int LoopNum;
+        [Params(1, 100)]
+        public int TaskNum;
+        [Benchmark]
+        public void ThreadingChannelWriteOnly()
+        {
+            var opt2 = new UnboundedChannelOptions();
+            opt2.AllowSynchronousContinuations = false;
+            var channel = Channel.CreateUnbounded<int>(opt2);
+            Task.WhenAll(Enumerable.Range(0, TaskNum).Select(async (idx) =>
+            {
+                await Task.Yield();
+                for (int i = 0; i < LoopNum / TaskNum; i++)
+                {
+                    channel.Writer.TryWrite(i);
+                }
+            })).ContinueWith(t => channel.Writer.TryComplete()).Wait();
+        }
+    }
     [Config(typeof(MultipleRuntime))]
     public class WhenAllBench
     {
@@ -79,7 +134,13 @@ namespace taskbench
     {
         static void Main(string[] args)
         {
-            var reporter = BenchmarkRunner.Run<WhenAllBench>();
+            var switcher = new BenchmarkSwitcher(new Type[]
+            {
+                typeof(WhenAllBench),
+                typeof(MultiWriterBench),
+                typeof(MultiReaderBench)
+            });
+            switcher.Run();
         }
     }
 }
